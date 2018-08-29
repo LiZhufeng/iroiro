@@ -1,0 +1,58 @@
+key_buffer_size
+
+索引块（index blocks）缓存的大小，它被所有线程共享，严格说是它决定了数据库索引处理的速度，尤其是索引读的速度
+参考资料：http://blog.51cto.com/tech110/269410
+
+query_cache_size
+MySQL查询缓存保存查询返回的完整结果。当查询命中该缓存，会立刻返回结果，跳过了解析，优化和执行阶段。默认是关闭的，如果没有配置默认就是0。
+参考博客：https://blog.csdn.net/u014044812/article/details/78924315
+官方文档：https://dev.mysql.com/doc/refman/5.7/en/query-cache-configuration.html
+
+tmp_table_size
+它规定了内部内存临时表的最大值，每个线程都要分配，一般用不到
+参考博客：https://www.cnblogs.com/sunss/archive/2011/01/10/1932004.html
+
+innodb_buffer_pool_size
+缓冲池字节大小，InnoDB缓存表和索引数据的内存区域，这个值设置的越大，在不止一次的访问相同的数据表数据时，消耗的磁盘I / O就越少。在一个专用的数据库服务器，则可能将其设置为高达80％的机器物理内存大小。
+参考博客：https://my.oschina.net/realfighter/blog/368225
+
+innodb_additional_mem_pool_size
+InnoDB 用来保存数据字典信息和其他内部数据结构的内存池的大小
+5.7.4 版本之后已移除配置
+参考博客；http://mysql.taobao.org/monthly/2016/04/01/
+
+innodb_log_buffer_size
+作用：binlog 写日志的缓存
+分配原则：控制在2-8M.这个值不用太多的。他里面的内存一般一秒钟写到磁盘一次
+默认配置：8M，使用默认配置应该差不多
+参考默认文档：https://dev.mysql.com/doc/refman/5.6/en/innodb-parameters.html#sysvar_innodb_log_buffer_size
+
+max_connections
+服务器最大连接数
+根据业务实际需要配置
+
+sort_buffer_size
+需要排序的会话缓存大小，这个貌似也不是越大越好，要根据具体情况来定
+在并发高的情况下，可以考虑设置最小值即可：256K
+参考博客：https://www.cnblogs.com/zengkefu/p/5600185.html
+
+read_buffer_size
+为需要全表扫描的MYISAM数据表线程指定缓存
+这个参数也可以暂时不关注
+参考博客同上
+
+read_rnd_buffer_size
+是MySql的随机读缓冲区大小。当按任意顺序读取行时(例如，按照排序顺序)，将分配一个随机读缓存区。进行排序查询时，MySql会首先扫描一遍该缓冲，以避免磁盘搜索，提高查询速度，如果需要排序大量数据，可适当调高该值
+
+join_buffer_size
+参考博客：https://blog.csdn.net/qq_21064841/article/details/53395899、https://blog.csdn.net/mydriverc2/article/details/79026421
+如果应用中，很少出现join语句，则可以不用太在乎join_buffer_size参数的设置大小。
+如果join语句不是很少的话，个人建议可以适当增大join_buffer_size到1MB左右，如果内存充足可以设置为2MB。
+
+thread_stack
+参考博客：https://www.jb51.net/article/110634.htm
+每个连接线程被创建时，MySQL给它分配的内存大小。当MySQL创建一个新的连接线程时，需要给它分配一定大小的内存堆栈空间，以便存放客户端的请求的Query及自身的各种状态和处理信息。
+
+binlog_cache_size
+参考博客：https://blog.csdn.net/lxpbs8851/article/details/38455223
+服务器在写binglog的时候，为每个session 分配的内存，在事务过程中用来存储二进制日志的缓存。
