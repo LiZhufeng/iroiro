@@ -17,3 +17,23 @@ CAS算法：线程安全的插入队列
 这个看代码也是一脸懵逼。。还是继续学习下吧
 
 博客：http://ifeve.com/concurrentlinkedqueue/
+补充：ConcurrentHashMap的学习博客：http://www.importnew.com/28263.html
+可以先学习一下红黑树
+
+## 三、线程安全相关知识
+### 1、闭锁：CountDownLatch 的两个方法：await和countDown
+源码分析：https://blog.csdn.net/chenssy/article/details/49794141
+### 2、FutureTask
+源码分析：https://blog.csdn.net/xxxzhi/article/details/51453438
+### 3、Samphere，数据库连接池
+acquire、release：源码看一下
+### 4、栅栏，CylicBarrier
+实现一组线程的同时唤醒
+
+这些都看完，可以理解下这个：
+实战：通过ConcurrentMap、FutureTask、putIfAbsent来实现高效的结果存储队列
+
+## 四、并发线程，执行任务
+### 1、 CompletionService：结合了Executor和BlockingQueue的方法
+
+这周能看完这些已经很不错了。。。
