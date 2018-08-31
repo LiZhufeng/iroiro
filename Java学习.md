@@ -25,6 +25,7 @@ CAS算法：线程安全的插入队列
 ## 三、线程安全相关知识
 ### 1、闭锁：CountDownLatch 的两个方法：await和countDown
 源码分析：https://blog.csdn.net/chenssy/article/details/49794141
+AQS框架：https://blog.csdn.net/vernonzheng/article/details/8275624
 ### 2、FutureTask
 源码分析：https://blog.csdn.net/xxxzhi/article/details/51453438
 ### 3、Samphere，数据库连接池
