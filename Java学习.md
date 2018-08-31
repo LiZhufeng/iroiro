@@ -11,6 +11,8 @@
 
 博客：https://www.cnblogs.com/snailclimb/p/9086334.html
 
+NIO博客：http://ifeve.com/java-nio-vs-io/
+
 ## 二、ConcurrentLinkedQueue
 CAS算法：线程安全的插入队列
 
