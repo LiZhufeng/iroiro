@@ -1,0 +1,33 @@
+一、概述
+首先CompletionService结合了Executor和BlockingQueue，大概就是实现了异步过程。
+
+二、具体方法
+1、submit(callable)
+
+
+
+提交线程到线程池，如果提交被拒绝将会抛出RejectedExecutionException。
+这个异常是线程池抛出来的，具体可以看线程池的构造方法，以及相关的几个拒绝提交处理器。博客
+
+2、submit(runnable)
+
+
+
+这个方法和第一个方法唯一的不同就是提交的是 runnable的线程，但是第二个参数：result的作用还未知。
+
+3、take和poll
+
+
+
+两者都是用来获取有结果的Future的，不一样的地方是take是阻塞方法，poll不是，如果当前没有任务完成了，poll会直接返回null。
+不过下面poll 方法还有一个可以传等待时间的实现，那个是阻塞方法。
+
+问题：如果后提交的任务先完成了，内部的BlockingQueue是怎么实现重排序的？
+
+
+
+
+
+
+
+
