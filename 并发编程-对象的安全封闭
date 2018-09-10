@@ -1,0 +1,61 @@
+一、一些基本队列导致的线程安全的问题
+1、Vector 与 ConcurrentModificationException
+即便是很多地方弄了加锁处理，通过迭代器对Vector进行遍历的时候，还是会出现这种异常情况。
+
+问题1：ConcurrentModificationException 这个异常 是什么时候会出现？
+博客:https://www.cnblogs.com/dolphin0520/p/3933551.html
+
+其实这个博客就已经讲得很清楚了。
+List 里面提供一个expectedModCount 和 modCount ，感觉这种设计的目的就是避免在进行迭代器遍历的时候，对数组进行其他修改操作的。
+
+单线程下，我们可以通过Iterator 的 remove方法来避免出现这种错误，因为Iterator的这个方法是会同时修改 modCount  和 expectedModCount  的。
+
+
+但是多线程下，这样修改也无法避免出现这种错误了。
+这种情况下，就需要在外部使用的时候加上同步操作，或者是使用线程安全的容器。
+
+
+问题2：为什么单线程也会抛出这种异常？怎么直接对容器中的List进行修改操作？
+---> 单线程下，如果直接对容器进行操作也会出现这种问题
+
+
+二、一些可以进行并发的容器
+1、ConcurrentHashMap
+其实现方法，是使用分段锁（lock striping），即粒度更细的一种锁，可以尽量保证一定数量的写入线程可以并发地修改Map。
+
+分段锁是什么？
+
+三、生产者 - 消费者模式
+
+1、两种基本的设计模式
+① BlockingQueue：通过一个有限队列，实现put方法等待，offer方法返回失败原因（可以把请求放到磁盘中之类的）。
+
+下来需要把这个队列的实现看一下
+
+② SynchronousQueue：有put就提交给消费者，通过维护一组线程，实现排队。
+
+问题：如果线程池满了怎么办？应该也是有一个offer方法的
+
+四、阻塞方法和中断方法
+1、Thread.interrupt方法：用于终端线程或者查询线程是否已经被中断
+----> 还有一点疑问，下来可以看下
+
+
+五、同步工具类
+1、闭锁
+CountDownLatch 的两个方法：await和countDown
+
+FutureTask：在执行的过程中调用get方法是阻塞的。
+https://blog.csdn.net/wojiaolinaaa/article/details/50434817
+https://blog.csdn.net/xxxzhi/article/details/51453438
+
+信号量
+Samphere
+通过acquire、release方法，可以实现一个BoundedList队列。
+acquire、release：源码看一下
+
+2、栅栏
+这个和闭锁很类似，但是和闭锁不同的是：闭锁锁的是一个线程，而栅栏锁的是一组线程：这一组线程都要等待某个事情完成之后，才会触发继续往下执行。
+
+六、实战：通过ConcurrentMap、FutureTask、putIfAbsent来实现高效的结果存储队列
+这个例子非常有代表性，可以好好看看。。
