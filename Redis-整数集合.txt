@@ -1,0 +1,14 @@
+官方文档：
+http://origin.redisbook.com/compress-datastruct/intset.html
+
+数据结构
+
+
+当前剩余问题：
+如果是插入中间的数据，是不是后面的元素都要向后移动？
+
+
+
+
+
+我去。。还真的是啊？这种情况怎么保证并发？？
