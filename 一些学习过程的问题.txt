@@ -1,0 +1,8 @@
+当前问题：
+1、Activiti和MyBatis如何支持？多数据源
+http://www.voidcn.com/article/p-mnylhbdd-d.html
+
+2、启动进行数据库查询的时候报了
+rg.apache.ibatis.binding.BindingException
+
+https://blog.csdn.net/ppppfly/article/details/46847299
