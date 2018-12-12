@@ -1,0 +1,12 @@
+参考博客：
+https://340starobserver.github.io/2017/01/25/Mysql-Backup&Restore/
+
+一、全备和增量备的方案设计
+mysqldump全备 + mysqlbinlog增备
+
+这个方案有一点不方便的地方：增量备依赖binlog文件，binlog文件只能在本机获取，所以没办法在远程机器上操作
+
+二、innobackupex
+
+
+还没看懂恢复的过程，回去再看看
