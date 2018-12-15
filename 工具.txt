@@ -1,0 +1,2 @@
+secureCRT 绿色版
+https://github.com/pzhaoyang/SecureCRT
