@@ -1,12 +1,22 @@
 参考博客：
 https://340starobserver.github.io/2017/01/25/Mysql-Backup&Restore/
 
+基本原理:
+http://www.cnblogs.com/yuyue2014/p/3705448.html
+
 一、全备和增量备的方案设计
 mysqldump全备 + mysqlbinlog增备
 
 这个方案有一点不方便的地方：增量备依赖binlog文件，binlog文件只能在本机获取，所以没办法在远程机器上操作
 
 二、innobackupex
+
+三、基本原理
+基本原理就是复制数据库文件，复制文件会产生一些错误（redo），然后从redo中恢复在复制文件过程中产生的错误。
+
+Apply-log: 通过回滚未提交的事务及同步已经提交的事务至数据文件也使得数据文件处于一致性状态
+
+Copy-back：执行恢复操作，其通过复制所有数据相关的文件至mysql服务器DATADIR目录中来执行恢复过程
 
 
 还没看懂恢复的过程，回去再看看
