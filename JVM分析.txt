@@ -16,6 +16,9 @@ Jstack -m
 -XX:+PrintClassHistogram
 
 问题① 如果是在tomcat里面运行，这个数据是怎么打印出来的呢？
+---> 服务器上无法通过这个参数打印。只能够使用下面的指令：
+
+jmap -histo pid
 
 3、打印GC日志
 打印GC的详细信息
