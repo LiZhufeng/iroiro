@@ -1,0 +1,16 @@
+1、jps：进程分析工具：
+jps -m -l：打印虚拟机执行主类（Main class）名称和参数
+
+jps -m -l -v：打印JVM启动参数
+
+场景：检查进程启动是否正常，确认启动参数的时候用
+
+设置方式：catalina中添加：
+JAVA_OPTS="$JAVA_OPTS -Xms2044m -Xmx4096m"
+
+-Xms -Xmx：
+Xms：给进程分配的最小内存大小
+Xmx：给进程分配的最大内存大小
+Xmn：新生代分配大小
+
+2、jstat
