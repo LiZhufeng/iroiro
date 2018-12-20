@@ -1,0 +1,53 @@
+零碎 - 内存分配和回收原则
+
+一、内存分配方式
+1、对象优先分配到eden区域
+问题① 新生代中，eden区和Survivir区有什么区别？
+
+博客-java堆，新生代，老年代，Eden空间，From Survivor空间，To Survivor空间
+https://blog.csdn.net/Muyundefeng/article/details/72667863
+
+
+对象创建 ---> Eden 中保存 ---> From Survivor ---> To Survivor ---> 老年代
+如果Survivor 的空间不够，对象会直接移动到老年代中
+
+2、大对象直接放到老年代中
+所以要特别避免创建短命的大对象。否则对GC的压力比较大
+
+3、长期存活的对象放到老年代中
+可设定放到老年代中需要经过的“年龄”
+
+4、动态对象年龄判断
+如果Survivor中，相同年龄的对象大小超过Survivor空间的一半，Survivor 中的对象会直接移动到老年代中
+
+5、空间分配担保
+JDK 6 Update 24之前的版本：有一个配置，控制当Minor GC发生的时候，需要判断新生代中的对象总大小是否大于老年代中还剩余的大小，如果大于的话，配置打开：将直接进行Minor GC，也就是认为Minor GC的过程是绝对安全的；如果关闭：将会认为这次Minor GC是不安全的，会改成用 Full GC。
+
+之后的版本：不再通过配置判断，而是判断老年代连续空间的大小是否大于新生代总大小，或者大于历次晋升的平均大小。大于的话，将会进行Minor GC。
+
+问题② 大于历次晋升的平均大小：如果第一次就进行了回收空间比较多的Minor GC，那
+么是否会导致后面几次没有必要的，连续的Minor GC？
+---> Minor GC 消耗较小，估计影响不大
+
+
+二、一些问题整理
+1、JVM中新生代为什么要有两个Survivor（form,to）？
+https://www.zhihu.com/question/44929481
+https://blog.csdn.net/antony9118/article/details/51425581
+
+就像提拔领导一样，总是要多经过一些阶段历练之后，才能够成为真正的大佬。
+分成了to和from两个区域，进行Minor GC的时候也方便判断
+
+
+
+
+
+
+
+
+
+
+
+
+
+
