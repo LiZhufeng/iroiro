@@ -1,0 +1,15 @@
+博客-Java Hotspot G1 GC的一些关键技术
+https://tech.meituan.com/g1.html
+
+博客-译文-G1收集器
+https://segmentfault.com/a/1190000007795862
+
+G1 回收器在CMS实现并发标记的基础上，优化数据结构（使用STAB，Snapshot-At-The-Beginning、RSet、Region，也就是新生代、老年代、幸存区等结构），实现尽量短的STW
+
+GC的过程：
+初始标记（这里只是标记从Root Region 所有可达的区域，速度比较快，需要STW） ---> Root Region 扫描（这里得到那些是存活的，哪些是可以清理的对象） ---> 并发标记（这个不太理解，是标记其他区域的？） ---> 再标记（将前面几个阶段过程中，新增的对象从log buffer里面再次进行标记，需要STW） ---> 清理
+
+注意：GC本身不提供Full GC！它只提供两种GC方式：Young GC和Mixed GC。
+如果这两种方式的基础上依然没办法清理出足够的空间，这种情况下才会进行Serial Old GC。
+
+
