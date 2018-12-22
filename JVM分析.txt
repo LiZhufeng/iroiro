@@ -1,53 +1,59 @@
-博客-JVM内存模型分析04篇-调优工具使用介绍
-https://zhuanlan.zhihu.com/p/36597907
+1、jps：进程分析工具：
+jps -m -l：打印虚拟机执行主类（Main class）名称和参数
 
-博客-【Tomcat】Tomcat配置JVM参数步骤
-https://www.cnblogs.com/qlqwjy/p/8007469.html
+jps -m -l -v：打印JVM启动参数
 
-一、问题说明
-测试环境部分模块占用CPU和内存高
+场景：检查进程启动是否正常，确认启动参数的时候用
 
+设置方式：catalina中添加：
+JAVA_OPTS="$JAVA_OPTS -Xms2044m -Xmx4096m"
 
-二、各个调试参数
-1、输出当前运行线程的堆栈情况
-Jstack -m
+-Xms -Xmx：
+Xms：给进程分配的最小内存大小
+Xmx：给进程分配的最大内存大小
+Xmn：新生代分配大小
 
-2、输出各个类的占用空间
--XX:+PrintClassHistogram
+2、jstat：虚拟机状态查询工具
+这里主要说明怎么检查虚拟机的GC情况
 
-问题① 如果是在tomcat里面运行，这个数据是怎么打印出来的呢？
----> 服务器上无法通过这个参数打印。只能够使用下面的指令：
+  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT   
 
-jmap -histo pid
-
-3、打印GC日志
-打印GC的详细信息
--XX:+PrintGCDetails
-
-指定GC日志的输出路径
--Xloggc:log/gc.log
+实时监控：
+jstat -gcutil pid 1000 200
 
 
+3、jinfo 查询java的配置信息
+
+jinfo -flag Xms pid
+
+查询直接报错了。。
+问题① jstack -F 这个参数是怎么用的？强制打印？
 
 
+4、jmap 生成快照文件
+alpha环境测试：
+jmap -F -dump:file=a.map pid
+
+这个会打印日志模型，但是没有解码，感觉不方便卡那。。
+
+博客说明
+https://stackoverflow.com/questions/15130956/how-to-analyse-the-heap-dump-using-jmap-in-java
+
+You should use jmap -heap:format=b <process-id> without any paths. So it creates a *.bin file which you can open with jvisualvm.exe (same path as jmap). It's a great tool to open such dump files.
+
+几个参数：
+live：只把存活的对象打印出来，也就是在导出之前会先进行一次full gc。
+Format = b：二进制文件？要用一下上面说的工具
 
 
+5、jhat：堆转储快照分析
+一般不使用这个工具。
+其实jmap生成的文件也比较大。
 
+6、jstack
+比较常用的工具：导出程序当前的堆栈情况。
 
+注意：在进行jmap的过程中jstack无法进行
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+7、HSDIS：JIT 生成代码反汇编
+其实就是将一个java代码编译成汇编代码。
