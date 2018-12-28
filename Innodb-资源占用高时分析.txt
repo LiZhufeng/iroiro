@@ -1,0 +1,28 @@
+一、当前正在执行的指令分析
+1、查看当前正在执行的指令
+show processlist;
+
+2、查看最近指令过的指令
+
+mysql  xxx -e "SELECT query,db,full_scan, exec_count,total_latency, max_latency, avg_latency, lock_latency,first_seen,last_seen FROM sys.statement_analysis order by first_seen desc limit 100;" > mysql_analyse.log
+
+二、内存状态分析
+1、innodb 状态分析
+
+mysql xxx -e "SHOW ENGINE INNODB STATUS;" > mysql_innodb_analyse.log;
+
+主要是看几个和命中率相关的参数。
+
+① 缓存中的冷热数据
+Pages made young xxx, not young yyy
+0.00 youngs/s, 0.00 non-youngs/s
+
+博客-MySQL buffer pool中的三种链
+https://www.cnblogs.com/geaozhang/p/7276802.html
+
+
+主要看当前数据扫描的情况：如果 youngs/s比较高，说明从冷数据到热数据这个过程比较快。可以修改innodb_old_blocks_time，或者是降低innodb_old_blocks_pct，使得成为“热数据”的门槛高一些。
+
+如果 not youngs/s比较高，说明从热数据刷新到磁盘的过程比较快，可能是有比较频繁的全表扫描操作，导致缓存中的数据经常被替换。
+
+
