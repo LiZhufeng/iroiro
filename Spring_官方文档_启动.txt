@@ -1,0 +1,39 @@
+Spring官方文档
+https://spring.io/projects/spring-boot#learn
+
+一、几个基本配置
+1、restful接口
+The @RestController and @RequestMapping Annotations
+
+@RequestMapping：url 解析和参数导入
+
+
+类比：@RequestMapping 是家里的门卫，决定哪些人可以进来，要以什么样的穿着或者是什么方式进来
+
+输出：这两个注解是如何对请求进行控制的。整体流程
+
+2、自动注入配置
+The @EnableAutoConfiguration Annotation
+
+二、打包成jar之后运行
+添加以下依赖即可打包成jar
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+
+剩余问题
+问题① 打包成jar之后会有文件名相同、不方便查看依赖的问题，spring是如何解决的呢？
+Spring Boot takes a different approach and lets you actually nest jars directly.
+具体可查看文档
+
+问题② SpringBoot 打包 getresource 无法读取配置文件
+未解决
+
+
+
