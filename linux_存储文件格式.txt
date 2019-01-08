@@ -1,0 +1,4 @@
+参考博客：
+https://www.ibm.com/developerworks/cn/linux/l-cache/index.html
+
+https://blog.csdn.net/zhangxinrun/article/details/5601284
