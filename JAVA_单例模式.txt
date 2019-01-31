@@ -1,0 +1,23 @@
+参考博客
+https://www.hollischuang.com/archives/2498
+https://www.hollischuang.com/archives/1144
+
+一、传统单例模式
+
+
+每次获取单例都要进行加锁和释放锁的过程
+
+二、使用Enum的单例模式
+好处有两个：
+1、Enum 天生的线程安全
+
+问题① 为什么使用ClassLoader 机制加载就是线程安全的呢？
+
+2、反序列化依然可以保证单例
+
+所以反序列化的时候也会将类重新加载一次？不然怎么会产生两个静态的成员呢
+
+
+
+
+
