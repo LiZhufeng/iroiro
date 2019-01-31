@@ -32,7 +32,7 @@ jinfo -flag Xms pid
 
 4、jmap 生成快照文件
 alpha环境测试：
-jmap -F -dump:file=a.map pid
+jmap -F -dump:file=a.map 79695
 
 这个会打印日志模型，但是没有解码，感觉不方便卡那。。
 
@@ -40,11 +40,42 @@ jmap -F -dump:file=a.map pid
 https://stackoverflow.com/questions/15130956/how-to-analyse-the-heap-dump-using-jmap-in-java
 
 You should use jmap -heap:format=b <process-id> without any paths. So it creates a *.bin file which you can open with jvisualvm.exe (same path as jmap). It's a great tool to open such dump files.
+指令：
+jmap -heap:format=b 48327
 
 几个参数：
 live：只把存活的对象打印出来，也就是在导出之前会先进行一次full gc。
 Format = b：二进制文件？要用一下上面说的工具
 
+1）map 文件方式
+----> 这个导出的速度太慢了，在数据很多的情况下
+
+这个数据如何查看？---> 还是要通过这个程序
+
+2）bin文件方式
+这个导出速度也很慢。。
+
+一些博客：
+博客-jmap的几个操作要慎用
+https://blog.csdn.net/zhangzhaokun/article/details/43344539
+其他：如果是使用CMS GC，有可能会导致线程挂起
+
+实际观察应用情况：确认模块会卡住，直接注册不上zookeeper，，所以这个指令一定要慎用
+建议方式：先使用gcore pid，先保存内存数据到本地，然后再使用jmap导出
+
+gdb -q --pid=4990 
+
+warning: target file /proc/48327/cmdline contained unexpected null characters
+Saved corefile core.48327
+
+
+
+这个时候可以看到在之前执行gdb的文件夹下面生成了 core.48327 文件
+
+最后再使用jmap指令：
+jmap -heap:format=b core.48327
+结果：有问题
+https://stackoverflow.com/questions/41222528/why-sun-jvm-hotspot-debugger-debuggerexception-cannot-open-binary-file
 
 5、jhat：堆转储快照分析
 一般不使用这个工具。
