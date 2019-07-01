@@ -1,0 +1,71 @@
+参考文档：
+https://www.jianshu.com/p/9309b7dc8a9f
+
+一、基本的语法糖介绍
+1、装箱、拆箱
+Integer、Double
+ValueOf、intValue
+
+2、泛型擦除
+问题：C++和Java的泛型实现上有什么区别？
+https://www.zhihu.com/question/278593769/answer/406085777
+
+主要区别：Java 对泛型是使用 “擦除”的策略，最终的目标代码只会生成一份。
+C++的泛型会对不同类型的实现都生成单独的静态代码。
+执行速度VS编译后的文件大小的区别。
+
+扩展问题：C++怎么知道目前我的泛型需要用哪些类型来实现？
+答：必须显式指定类型
+比如：
+template <class T> 
+void swap(T &a, T &b) {
+    T temp;
+    temp = a;
+    a = b;
+    b = temp;
+}
+
+要么通过swap<int> 方式调用，要么swap(a,b)明确a和b 的类型。
+但是java 不用，所有的泛型都会用擦除方式做处理。相当于只是检查编译错误用的。
+
+扩展问题：泛型擦除在Java8中的应用？ -- 后续了解
+
+3、foreach 遍历
+
+4、Stream：传InterfaceFunction 的构造
+
+这里开始是自己之前不了解的：
+5、Switch：hashcode+equals判断是否相同
+
+6、Enum
+编译后会自动生成final、valueOf、values、静态代码块
+问题：Enum 的valueOf 和 values方法是干嘛用的？
+
+7、可变长参数
+具体看网页示例
+String …args ---> String[] args
+
+8、内部类
+编译会生成两个class文件，独立的。
+
+9、条件编译
+即去除不必要的if 判断，如：final boolean
+
+10、assert断言
+和条件编译的原理差不多
+
+11、大数字用下划线分割
+如：int I = 10_000;
+
+12、try .. With .. Resource
+这个简直是文件相关资源处理的福音。。。
+Try 里面把资源初始化的代码写好。
+
+13、Lambda
+后续了解
+
+
+
+
+
+
