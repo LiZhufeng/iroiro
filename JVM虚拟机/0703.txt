@@ -1,0 +1,150 @@
+一、mybatis 相关
+1、设计模式
+https://zhuanlan.zhihu.com/p/68600540
+
+二、linux 相关知识 -- 暂时不看
+1、进程：task_struct 结构
+https://blog.csdn.net/gatieme/article/details/51383272
+
+
+三、maven -- 完成
+1、type 相关
+暂时没有找到很好的说明 --- type为pom 表示是引入父节点的依赖，不是直接引入jar包（默认就是jar）
+Type和Scope 有什么区别？
+Type --- 一般指的是如何导入依赖的包（比如两个项目如果都是服务器项目，那么引入的时候就要用type: pom了；如果被引入的项目本身打出来的包就是jar，那么可以用默认的type: jar）
+Scope：运行时期，pom的作用。默认都是Compile，即参与编译。仅和测试相关的可以定义为test；
+
+四、Java 基础知识 -- 后续解决
+1、对象相关的问题
+
+五、元空间的问题，猜测：引用太多了，增加字符串大小，缩短引用大小看看
+
+七、数据库
+备份相关问题：
+1、Myisam为什么可以热备？
+---> 暂时先放着，可能是因为所有的操作都是锁表操作导致的
+
+2、Single-transaction的作用？会不会锁表 -- 完成
+参考：
+https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_single-transaction
+https://stackoverflow.com/questions/12939768/innodb-with-single-transaction-or-replication
+
+---> 会把事务隔离级别设置成REPEATABLE READ
+总之有一个好处：只要在备份的过程中没有进行DDL操作，就不会锁表。
+因为REPEATABLE READ 会保证能读取到事务开启之前的数据
+
+问题：REPEATABLE READ 事务隔离级别
+官方文档参考：
+https://dev.mysql.com/doc/refman/8.0/en/innodb-transaction-isolation-levels.html#isolevel_repeatable-read
+https://dev.mysql.com/doc/refman/8.0/en/innodb-consistent-read.html（扩展：持续非锁读取）
+https://dev.mysql.com/doc/refman/8.0/en/innodb-locking.html（扩展：innodb 锁的机制）
+
+总之，该事务级别下，所有只读的事务都不会对表锁，因为会新建一个快照。其他事务的写入操作都不会被读取到
+
+3、xtrabackup不干扰事务的原理
+http://mysql.taobao.org/monthly/2016/03/07/
+http://www.ttlsa.com/mysql/the-principle-and-implementation-of-xtrabackup/
+---> 大概流程：记录LSN ---> 拷贝redo 文件 和 ibd 文件---> 解锁表
+
+4、绝对能够保证备份完整的配置 -- 晚点看
+备库的一些配置：Relay log
+事务隔离级别和主备同步之间的关系？
+
+5、扩展：事务隔离级别
+参考博客：
+https://www.aneasystone.com/archives/2017/12/solving-dead-locks-three.html
+https://www.cnblogs.com/rjzheng/p/9950951.html
+https://www.jianshu.com/p/13f5777966dd
+
+测试常用语句：
+show processlist;
+
+Begin; commit；
+set session transaction isolation level read UNCOMMITTED; 
+
+#select @@global.tx_isolation,@@tx_isolation;
+
+未提交读（每次问课代表作业是否作业全部都写完了，课代表都会对每个同学问一遍，了解最新情况）
+已提交读（学生写完作业之后先交到课代表那里去）
+可重复读（课代表自己也没写完作业，，等自己作业写完之后再检查其他同学的作业）
+可串行化（读写都是相互阻塞的）
+
+问题：已提交读，在select * 的时候会不会锁表？
+---> 答案：不会锁表，因为只会查快照里面的数据
+
+测试：未提交读，写入数据的时候是否会相互阻塞？ -- 不会
+
+测试：可串行化，在同时写和读数据的时候，会阻塞。因为查询操作也是加X锁。
+注意：只有在发生死锁的时候，show engine innodb status 才会打印死锁信息。其他时候，一般每一个session 的lock 数量都是0
+
+总结：
+READ UNCOMMITTED：事务之间数据可见性：提交后可见；读和读事务同时执行：不会阻塞；读和写同时进行：不会阻塞；写和写同时进行：阻塞
+READ COMMITTED：事务之间数据可见性：提交后可见；读和读事务同时执行：不会阻塞；读和写同时进行：不会阻塞；写和写同时进行：阻塞
+READ REPEATABLE：事务之间数据可见性：事务完成后可见；读和读事务同时执行：不会阻塞；读和写同时进行：不会阻塞；写和写同时进行：阻塞
+SERIALIZABLE：事务之间数据可见性：提交后可见；读和读事务同时执行：不会阻塞；读和写同时进行：阻塞；写和写同时进行：阻塞
+
+因此：只有最后一种情况会有区别：读和写之间也会阻塞（相当于Select 的操作加了X锁）。（但是如果对同一行数据同时进行读写也会锁住，只是操作比较快一般看不到，Select * 一般是安全的，不会造成死锁）
+另外事务还没有提交的时候，加的锁都是意向锁（？否则读和写之间怎么会不冲突呢？）
+---> 除了Serializable 的隔离级别，其他情况下读都是不加锁的！都是快照读。
+
+最后一个问题：对非索引列的查询和修改操作
+--> 目前来看没有死锁，应该是做过一些优化策略的：通过非索引列找到数据之后，还是会根据主键的id进行加锁。
+
+关于事务隔离级别的理解还是要从可见性和锁的两个角度来理解。
+
+扩展：其他和锁相关的配置？
+
+6、扩展：single-transaction：如果快照需要创建很长时间呢？
+关于快照的解释：
+https://blog.csdn.net/cxm19881208/article/details/79415726
+
+7、mysql 启动的流程 -- 晚点
+
+8、如何查看读锁 -- 暂时无
+
+9、事务隔离级别的扩展：意向锁
+https://juejin.im/post/5b85124f5188253010326360
+意向锁是针对DDL操作来说的，也就是表上面的修改。
+总之只要记住几个概念就行：
+意向锁本身之间不会冲突，也不会和任何行级锁冲突，只会和表上面的锁冲突
+
+10、RU、RC和RR情况下加锁有什么不同？ --- 回去看
+
+
+八、netty
+1、5.0 版本的新特性
+
+九、java8
+1、内存空间
+
+十、网络相关
+1、Cookie 和  Session 有什么区别？
+https://www.cnblogs.com/lightsong/p/4172979.html
+https://juejin.im/entry/5766c29d6be3ff006a31b84e
+https://www.jianshu.com/p/abc52bee3898
+
+原因概述：
+session是保存在服务器中的，用来标记客户端登录过的信息。
+比如我登录B站，打开一个新的链接，B站怎么知道几分钟之前我登录过？通过Session id 就可以判断（所以即使是在同一台电脑上，换一个浏览器打开，就需要重新登录了）
+（即使是设置了无痕模式，不保存cookie，同一个浏览器依然可以保留登录记录）
+
+Cookie 是保存在客户端中的。因为保存在客户端，所以可以保存很多定制化的东西，比如搜索记录（广告定向投放）、登录密码等等。
+Cookie 同样可以用来保存登录记录，可以设置过期时间。
+而且cookie 的名字是由服务端来决定的，所以很多网站都可以拿其他网站的cookie 来做定向推荐。
+
+
+
+2、Servlet 
+https://www.zhihu.com/question/21416727
+
+
+
+十一、其他扩展问题
+1、maven 进行打jar包的配置
+https://blog.csdn.net/xiao__gui/article/details/47341385
+
+2、数据库：发生死锁的条件
+如果同时对两个索引进行搜索操作，是否两个都会发生死锁？
+---> 目前测试并没有，应该是之前没有复现出来
+
+
