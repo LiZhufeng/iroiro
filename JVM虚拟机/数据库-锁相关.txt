@@ -1,0 +1,42 @@
+https://www.cnblogs.com/rjzheng/p/9950951.html
+联想：图书馆看书
+
+来源问题：Select * 和 alter 会相互阻塞？？原因？？
+Select * 为什么会加MDL锁？？应该都读取快照就可以了吧？？
+https://www.cnblogs.com/ivictor/p/9459265.html
+
+后续找到的解释：meta data lock 是通过一个队列去申请的，因此只要有一个语句申请metadatalock 卡住，其他的申请全都会卡住（这个设计？？？）
+https://www.cnblogs.com/mqxs/p/6063095.html
+
+一、锁的基本类型
+行锁
+表锁
+意向锁
+
+Metadata lock
+
+问题1：意向锁的作用？
+在进行DDL操作的时候，不需要对每一行数据都进行判断，是否有别人在修改。
+直接判断表上有没有意向写锁就可以了。
+
+二、行锁的种类
+Record lock
+Gap lock
+Next-key lock（上两种lock的结合，只有在事务隔离级别为RR或者是Serializable的时候才会加）
+
+所以：
+在RR、Serializable 隔离条件下，加了索引不代表只加行锁，还会加范围锁！
+RC、RU 只会加行锁
+
+三、脏读与幻读
+https://segmentfault.com/a/1190000016566788
+
+脏读：读到其他事务未提交的数据。（抄作业，把别人一开始做错的答案抄过来了）
+不可重复读：在同一个事务中，同一个SQL两次读取到的数据不一样。（例子差不多，抄了多个人的）
+幻读：读取某一行的数据不会受到其他事务影响了，但是在插入操作（或者是Select count(*)） 的时候，结果又不一样（去食堂打饭，一开始占了个座位，结果打完饭回来发现未知被别人占了）
+
+RU：脏读、不可重复读、幻读
+RC：不可重复读、幻读
+RR：幻读
+Serializable：无以上问题
+
