@@ -1,0 +1,83 @@
+一、数据库 -- 完成
+1、快照的原理
+https://www.cnblogs.com/wwcom123/p/10727194.html
+
+2、select count(*) 做的操作？
+
+3、select count(*) 和 select count(primary id) 有什么区别？
+---> 如果id 是主键id，其实效率上来说没什么区别，因为都是需要扫描聚簇索引的。
+但是查询非聚簇索引，可能可以优化一点，因为查子树的效率，数据没那么多，可以减少IO操作。
+Select count(*) 会将当前表的所有数据都加载到缓冲区。
+
+实际测试：依然很慢，所以还是建议通过explain 或者是information_schema.tables 里面获取总数的大概信息
+但是：两者的数据相差比较多：这个时候可以执行ANALYZE TABLE 指令，先将表中的数据统计一下，实测千万数据速度还可以，1s左右。
+
+问题：ANALYZE TABLE 过程中发生了什么？
+---> 可能是对索引的使用情况：Cardinality 进行了一些统计。
+查看索引使用情况的统计可以用show index from table_name 来看。
+
+4、BTREE 索引是否会对空值进行索引？
+---> 会的，但是只限于只查询一列有null 的索引列。如果查询包括多列，还是只会用其中一列。
+
+5、show index 的统计中，NULL 列是什么意思？
+---> 字段本身的限制，和索引没关系。
+
+6、EXPLAIN 返回语句的具体情况分析
+https://www.cnblogs.com/kerrycode/p/9909093.html
+
+7、metadata lock
+https://www.alibabacloud.com/blog/generation-and-handling-of-metadata-locks-on-rds-for-mysql-tables_308797
+https://lxadm.com/MySQL:_avoiding_%22Waiting_for_table_metadata_lock%22_when_executing_%22ALTER_TABLE%22
+
+8、MVCC
+
+
+二、SpringCloud
+1、服务发现
+https://www.cnblogs.com/happyflyingpig/p/7955883.html
+
+2、@Service 注解
+
+
+三、java基础 -- 完成
+1、classloader 双亲委派原理，以及怎么破坏双亲委派？？
+--> 后续看tomcat 那本书了解一下，现在初步了解一下。
+
+2、构造方法-菱形继承
+---> Java 因为不支持继承多个Class 所以不用担心有继承多个相同的已实现方法的问题
+
+问题① 当出现接口多继承的时候，会不会冲突？
+---> 不会，接口和实现不同，接口里面的方法在继承之后只会保留一份。
+
+问题② C++的菱形继承
+Java 的解决方式，就是直接不允许多继承（Java8 之后，接口引入了default方法，不过继承多个default 方法编译期也会报错的）
+为了解决这个问题，C++引入了虚继承这个概念。
+比如B虚继承A，相当于在B中会保留指向A类的一个虚拟指针（4个字节），虚方法只能通过具体的类类型来调用（B* 只会调用B的虚方法，A* 只能调用A的）。但是普通方法，还是会直接覆盖的。
+
+所以C++的虚继承才是最体现“多态”的机制。
+
+3、关闭钩
+https://blog.csdn.net/wk1134314305/article/details/78504269
+
+总之大概就是一个替代Finallize ，在JVM结束的时候进行资源释放的一种机制。
+正常关闭JVM的话，可以保证它一定会被执行。
+应用：GRPC
+
+五、其他扩展问题
+1、PostgreSQL 比较innodb 的优势？
+https://www.cnblogs.com/kerrycode/p/9909093.html
+
+2、setDeamon(true) 是否会导致线程持有的资源不释放？
+
+3、junit 的 @Test 注解 和 JVM 的进程有什么区别？
+启动了非守卫线程，JVM还是立马就关闭了
+
+4、Java8 - 接口的静态方法和default 方法
+
+5、java - 编译期预热原理
+
+6、mybatis 所有的查询都会开启事务？
+扩展：mybatis 事务详解
+https://blog.csdn.net/luanlouis/article/details/37992171
+
+
