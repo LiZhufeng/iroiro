@@ -1,0 +1,27 @@
+一、java
+1、接口的默认方法和静态方法
+① 判断继承使用的是哪个方法的三个原则
+
+② 什么时候会发生类继承的冲突？
+能够精确找到实现最具体的方法，不会冲突
+但是如果有多个类有相同具体程度的继承，就会发生冲突了。
+
+2、Optional
+这里没什么好说的，在实战当中多用就行了。尽量把一些判空操作都替换掉。
+
+3、实战-响应式编程 -- 晚点看
+https://github.com/ZhongyangMA/webflux-streaming-demo/wiki/%E5%8F%8D%E5%BA%94%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%A6%82%E8%A7%88%EF%BC%88%E4%B8%AD%E6%96%87%E7%89%88%EF%BC%89
+
+https://blog.51cto.com/liukang/2090191
+
+二、数据库
+
+三、Redis
+https://juejin.im/post/57fa935b0e3dd90057c50fbc
+
+书籍：github 上下载
+
+
+
+
+
