@@ -1,0 +1,38 @@
+一、java -- 完成，比较简单
+1、hashmap原理
+
+2、类加载器原理 - 如何判断一个类是否被加载过？
+
+3、JVM 的启动过程
+https://www.cnblogs.com/aspirant/p/7200523.html
+https://www.jianshu.com/p/b91258bc08ac
+https://blog.csdn.net/CSDN_Terence/article/details/77771429
+
+启动 ---> 申请初始化的内存空间 ---> 加载类 ---> 调用main方法
+
+4、SpringBoot 的启动过程？
+
+
+二、redis -- 暂时完成
+1、redis 的扩容和hashmap 的扩容对比？
+Redis 的扩容：拷贝出一份磁盘空间，然后将老map 中的数据逐渐拷贝到新表中，拷贝的过程中，查询操作会在两个map中都进行，确保插入不会阻塞。
+HashMap 的扩容：不是线程安全的，可能会产生环。
+
+2、Redis 的客户端选用
+https://blog.csdn.net/w1014074794/article/details/88827946
+
+3、redis 的集群
+Rediscluster
+哨兵机制
+
+三、数据库
+1、主库保证能同步数据到备库的最佳配置 -- 回家再看
+
+
+四、扩展
+1、google protobuf
+看一下在序列化上面是否可以带来比较快的效率，不然每次用fastjson 也确实麻烦
+
+2、Spring 缓存
+
+
