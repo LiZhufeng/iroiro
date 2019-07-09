@@ -34,5 +34,5 @@ Rediscluster
 看一下在序列化上面是否可以带来比较快的效率，不然每次用fastjson 也确实麻烦
 
 2、Spring 缓存
-
+https://cloud.tencent.com/developer/article/1336296
 
