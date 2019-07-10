@@ -1,0 +1,72 @@
+一、java
+1、gradle
+https://spring.io/guides/gs/gradle/
+
+问题：为什么在Android 场景中更适合用gradle?
+
+---> 扩展性比较好，可以设置不同类型的工程。而且速度上快很多
+
+2、java 基础知识
+类的基础知识
+
+问题① ArrayList 和 LinkedList 的区别？
+主要从插入和查找上区别两者的效率
+但是同样的一点是两者都不是线程安全的。
+
+3、Spring:缓存的使用 -- 完成
+缓存相关的注解：
+https://www.javazhiyin.com/4618.html
+
+Spring继承ehcache缓存
+https://blog.csdn.net/gnail_oug/article/details/80334645
+作用：单机缓存，但是不适合做集群的缓存
+
+问题：几个缓存机制的特点和对比
+相对来说，两者之间在性能上面的差距不大，其实主要还是看业务场景。
+
+4、Netty
+几个需要了解的概念：
+① HttpServerCodec
+
+二、git - 一些常用的指令
+
+三、redis
+1、需要在整个redisCluster中查询数据，需要如何操作?
+JedisPool本身底层是支持的
+
+2、多个线程同时对redis 的数组进行“获取”的操作，是否会有问题？
+---> 有问题，会重复处理
+
+3、zrem 如何实现单个线程加到锁？
+
+4、redis-list 的基本实现？
+
+5、redis的锁和zookeeper的锁的区别？
+redis：打电话，是否锁被占用可以立马知道，占用到锁完成之后才设置超时时间。
+zookeeper：借书，如果书被借走了，图书馆会设置一个等待队列，书还了之后可以通知。但是本身事件还是阻塞的。
+
+6、redis 管道的原理
+https://blog.csdn.net/youaremoon/article/details/51751991
+只是客户端做的一层优化
+相当于对于可并发进行的操作，redis 一次性将所有的请求都发送给服务端。
+
+四、数据库
+
+五、zookeeper
+1、paxos 算法
+① 2PC 和 3PC  的对比
+个人觉得这两种方式其实效果差不多，都不能解决fail-recover 的问题，因为恢复的coordinate 依然会发送abort 请求
+
+2、扩展：redis 是如何对数据进行提交的？
+
+六、kafka
+1、基本的设计思想
+
+七、webflux 框架
+
+
+
+
+
+
+
