@@ -1,0 +1,96 @@
+一、redis
+1、位图
+
+二、java
+1、锁的对比
+https://stackoverflow.com/questions/9072422/difference-between-synchronized-and-re-entrant-lock
+
+其实大概的意思就是：synchronized更像是一个亲儿子，它的效率上可能更高一些，因为JDK1.5 之后做了很多优化，而且代码上看也更加简洁（可以直接修饰方法）
+但是ReentranceLock 的扩展性更高：可以设置等待多个对象、可以设置等待时间。也可以获取正在等待的队列。
+
+关于性能方面的推测：在竞争不是特别激烈、锁访问本身不是特别多的时候，由于ReentranceLock实现比较简单，效率上是比Synchronized要高的；
+但是如果锁本身都是被单线程访问，而且访问比较频繁，Synchronized还是有优势。
+而且Synchronized 还有锁粗化的一些优化方式
+
+扩展：AQS的原理介绍
+http://gee.cs.oswego.edu/dl/papers/aqs.pdf
+https://www.cnblogs.com/dennyzhangdd/p/7218510.html
+
+
+2、minorGC、MajorGC和FullGC发生的条件，结合异常来分析 -- 回去搞
+元空间
+	方法区的缺陷 --- 不能自动扩展，而且由于里面存储的数据是加载出来的类，所以也很难预测什么时候会溢出
+	元空间的优势 --- 可以自动扩展，而且GC也能够更早预知
+	元空间发生溢出的情况 --- 待本地测试
+
+首先用jmap 导出信息
+jmap -F -dump:file=a.map 79695
+
+3、集合
+集合
+	类型
+		队列/数组
+			ArrayList（继承RandomAccess，可以高效地随机访问）
+			List
+			Vector
+			Queue
+		Map
+			HashMap
+			ConcurrentHashMap
+		集合
+			Set
+		链表
+			LinkedList
+	公共方法
+		Arrays
+		CollectionUtils
+		Collectors
+	一些问题
+		使用集合的对比
+			HashMap 1.8 之后的改进
+			ConcurrentHashMap 相对HashMap 的优势
+			hashmap如果发生冲突了会怎么样（默认的大小）
+		跟源码相关的问题分析
+			Hashmap 的put过程：检查元素是否存在 ---> 不存在则扩容，并插入数据
+		一些阻塞队列（放到多线程专题统一整理）
+			ArrayBlockingQueue
+			LinkedBlockingQueue
+			SynchronousQueue
+
+三、redis -- 进行中
+目标：看完位图、HyperLogLog
+位图：
+可以将字符串用二进制位来表示
+注意hello 的顺序
+单个字符本身的顺序是从高位--->低位
+但是反过来单词的表示就是从低位--->高位了。
+
+基本操作：bset、bget（很遗憾一次取出来的范围必须是8的整数倍）、bfield
+
+主要用途：用更小的数据结构保存一些“是否”的数据，比如当前是否签到。
+但是因为bget 的限制，其实线上环境不怎么用
+
+
+HyperLogLog
+可用于统计网站的UV(Unique Visitor)
+使用算法：伯努利实验
+
+Bloom Filter
+在HyperLogLog 的基础上做另一个场景的改进
+HyperLogLog是用来统计数量，Bloom Filter 用来判断是否之前插入过。
+
+五、数据库
+1、三大范式
+
+2、整理
+索引
+	索引的种类
+		聚簇索引
+		非聚簇索引
+	explain分析
+	各种查询
+		精确查询
+		范围查找
+		join查询
+		Union(all)查询
+	
