@@ -1,0 +1,57 @@
+基本工程：springboot demo
+
+一、依赖注入
+
+        <!-- 数据库驱动 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <!-- Mybatis -->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>1.3.0</version>
+        </dependency>
+        <!--Mybatis 分页插件 pagehelper -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.2.7</version>
+        </dependency>
+        <!-- Druid连接池包 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.0.25</version>
+        </dependency>
+
+二、druid配置文件
+参考：
+https://blog.csdn.net/bk_yzw/article/details/79215278
+
+三、mapper方法的编写方式
+参考：
+https://my.oschina.net/zhaojia/blog/749993
+
+
+四、启动的时候加载配置文件
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+@ImportResource({ "classpath:mybatis-config.xml"})
+
+五、扩展：重启数据源
+DruidDataSource本身支持setUrl、restart方法，可以重置数据源
+
+
+五、扩展：通过Spring切面来实现分库分表
+https://www.jianshu.com/p/a3ea36783fe0
+https://wely.iteye.com/blog/2275725
+
+六、扩展：拦截器
+
+
+
+
+
+
+
