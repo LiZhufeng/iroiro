@@ -1,0 +1,44 @@
+一、Spring事务
+1、@transaction，没有标注的方法调用被标注的方法
+
+二、zookeeper和分布式
+1、一致性哈希
+基本算法
+
+redis的实现方式
+
+redis如何解决节点挂了之后的问题
+
+2、分布式协调：uuid生成器
+
+
+
+
+三、其他人的：前端
+网络攻击：xrfs跨域攻击
+
+post请求的header内容
+
+
+
+四：另一个：
+后续：
+工业设计上的要求：CAP、BASE
+概念
+设计取舍
+原因
+
+自己在架构上面的优化
+中间件
+业务层面
+	MyBatis-inception过滤器
+	redis做数据库的缓存（用例）
+	存入数据批量
+	@Transaction（？）
+Zookeeper等中间件
+	数据库的主备状态监控和切换
+		DruidDataSource 数据源可以销毁并重新创建
+			
+		Curator事件监听
+	配置中心
+Curator事件监听
