@@ -1,17 +1,37 @@
 一、Spring事务
 1、@transaction，没有标注的方法调用被标注的方法
-
+@Transaction
+	原理
+		管理事务的方式：本质上也是通过数据库的事务处理方式来管理的，主要类：TransactionInterception
+	回滚
+		rollback定义的方法，没有标注@Transaction的方法不能被回滚。
+	事务隔离级别
+	应用：
+		批量插入用例（如果中间有一个用例插入失败了，不会产生脏数据）
+		
 二、zookeeper和分布式
 1、一致性哈希
-基本算法
-
-redis的实现方式
-
-redis如何解决节点挂了之后的问题
+	产生原因：默认的线性分桶方式，在某个节点（桶）挂掉的时候，所有的节点都需要重新计算哈希值，特别麻烦
+	基本算法：环形的方式
+	redis的实现方式：2^32-1，取余
+	改进：虚拟节点
 
 2、分布式协调：uuid生成器
+分布式uuid
+	原因：数据库自增id有效率问题
+	实际应用
+		Redis
+			参考博客：https://juejin.im/post/5b3a23746fb9a024e15cad79#heading-7
+			原理：单线程incr
+			缺陷：受制于redis单线程的效率
+		Twitter-Slowflake
+			原理：借助zookeeper实现集群生成不同的uuid
+			结构：1位符号位；41位时间戳码；10位标注集群机器编号码；12位毫秒内的id码（这里用自增，可能是用到了zk）
+			缺陷：机器需要进行时钟同步
+		美团（还没看）
+			原理：https://tech.meituan.com/2017/04/21/mt-leaf.html
 
-
+3、分布式：幂等
 
 
 三、其他人的：前端
@@ -28,10 +48,12 @@ post请求的header内容
 设计取舍
 原因
 
-自己在架构上面的优化
 中间件
 业务层面
-	MyBatis-inception过滤器
+	分表：MyBatis-inception过滤器
+		哈希算法
+		用到的注解
+	分库：Aspect （？）
 	redis做数据库的缓存（用例）
 	存入数据批量
 	@Transaction（？）
