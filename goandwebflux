@@ -137,3 +137,23 @@ public class GreetingController {
 //    }
 
 }
+
+// 测试方法my_first_test.go
+package test
+
+import "testing"
+
+func TestPrint(t *testing.T) {
+	structArr := []struct{
+		name string
+		age int
+	}{
+		{"xiaoming", 10},
+		{"xiaohong", 9},
+	}
+
+	for _, student := range structArr {
+		t.Logf("当前学生的名字为: %s, 年龄为: %d\n", student.name, student.age)
+	}
+}
+
